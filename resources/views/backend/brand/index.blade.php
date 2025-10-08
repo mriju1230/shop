@@ -12,6 +12,7 @@
                 <h2>All Brands</h2>
                 <a class="btn btn-sm btn-primary" href="{{ route('brand.create') }}">Create Brand</a>
                 <hr>
+                 @include('layouts.components.message')
                 <table class="table">
                     <thead>
                         <th>#</th>
@@ -24,14 +25,19 @@
                     <tbody>
                         @foreach ($brands as $brand)
                            <tr>
-                                <td>1</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $brand-> name}}</td>
-                                <td>{{ $brand-> slug}}</td>
-                                <td><img height="20px" src="{{ URL::to('$brand-> logo') }}" alt=""></td>
+                                <td>{{ $brand-> slug}}</td>                                
+                                <td><img style="height:50px" src="{{ URL::to('media/brands/'. $brand-> logo) }}" alt=""></td>
+                                <td>{{ \Carbon\Carbon::parse($brand->created_at)->diffForHumans()}}</td>
                                 <td>
-                                    <a href=""><i class="ti-eye"></i></a>
-                                    <a href=""><i class="icon-pencil"></i></a>
-                                    <a href=""><i class="ti-trash"></i></a>
+                                    <a href="{{ route('brand.show', $brand -> id ) }}"><i class="ti-eye"></i></a>
+                                    <a href="{{ route('brand.edit', $brand -> id ) }}"><i class="icon-pencil"></i></a>
+                                    <form style="display: inline" action="{{ route('brand.destroy', $brand -> id ) }}" method="POST">
+                                        @csrf 
+                                        @method('DELETE') 
+                                        <button type="submit"><i class="ti-trash"></i></button>
+                                    </form>
                                 </td>
                            </tr>
                         @endforeach                        
